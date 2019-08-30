@@ -172,7 +172,11 @@ class Zef::Client {
         @local-candis;
     }
     method !fetch(*@candidates ($, *@)) {
-        my @fetched = eager gather for @candidates -> $candi {
+        my $dispatcher := $*PERL.compiler.version < v2018.08
+            ?? @candidates
+            !! @candidates.race(:batch(1), :degree(%*ENV<ZEF_FETCH_DEGREE> || 5));
+
+        my @fetched = $dispatcher.map: -> $candi {
             self.logger.emit({
                 level   => DEBUG,
                 stage   => FETCH,
@@ -217,8 +221,11 @@ class Zef::Client {
             }
 
             $candi.uri = $save-to;
-            take $candi;
-        }
+
+            $candi;
+        };
+
+        return @fetched;
     }
     method !extract(*@candidates ($, *@)) {
         my @extracted = eager gather for @candidates -> $candi {
