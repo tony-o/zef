@@ -9,7 +9,7 @@ install:
     - appveyor-retry git clone https://github.com/rakudo/rakudo.git %APPVEYOR_BUILD_FOLDER%\..\rakudo
     - cd %APPVEYOR_BUILD_FOLDER%\..\rakudo
     - perl Configure.pl --gen-moar --gen-nqp --backends=moar
-    - git checkout 2019.03.1
+    - git checkout 2019.07.1
     - nmake install
     - SET RAKUDO_MODULE_DEBUG=1
     - SET PATH=%APPVEYOR_BUILD_FOLDER%\..\rakudo\install\bin;%PATH%
