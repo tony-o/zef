@@ -186,7 +186,7 @@ class Zef::Client {
             die "Cannot determine a uri to fetch {$candi.as} from. Perhaps it's META6.json is missing an e.g. source-url"
                 unless $candi.uri;
 
-            my $tmp      = $!config<TempDir>.IO.child("{time}.{$*PID}.{(^10000).pick(1)}");
+            my $tmp      = $!config<TempDir>.IO.child("{time}.{$*PID}.{(^10000).rand}");
             my $stage-at = $tmp.child($candi.uri.IO.basename);
             die "failed to create directory: {$tmp.absolute}"
                 unless ($tmp.IO.e || mkdir($tmp));
